@@ -1,0 +1,21 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t arubov/react-test -f ./client/Docerfile.dev ./client
+
+scripts:
+  - docker run arubov/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t arubov/multi-client ./client
+  - docker build -t arubov/multi-nginx ./nginx
+  - docker build -t arubov/multi-server ./server
+  - docker build -t arubov/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push arubov/multi-client
+  - docker push arubov/multi-nginx
+  - docker push arubov/multi-server
+  - docker push arubov/multi-worker

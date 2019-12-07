@@ -4,7 +4,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t arubov/react-test -f ./client/Docerfile.dev ./client
+  - docker build -t arubov/react-test -f ./client/Dockerfile.dev ./client
 
 scripts:
   - docker run arubov/react-test npm test -- --coverage
